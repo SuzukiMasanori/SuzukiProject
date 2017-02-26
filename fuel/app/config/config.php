@@ -41,7 +41,7 @@ return array(
 	 *
 	 * Set this to 'index.php if you don't use URL rewriting
 	 */
-	// 'index_file' => false,
+	'index_file' => false,
 
 	// 'profiling'  => false,
 
@@ -77,14 +77,15 @@ return array(
 	/**
 	 * Localization & internationalization settings
 	 */
-	// 'language'           => 'en', // Default language
-	// 'language_fallback'  => 'en', // Fallback language when file isn't available for default language
+	'language'           => 'ja', // Default language
+	'language_fallback'  => 'en', // Fallback language when file isn't available for default language
 	// 'locale'             => 'en_US', // PHP set_locale() setting, null to not set
+	'locale'             => null,
 
 	/**
 	 * Internal string encoding charset
 	 */
-	// 'encoding'  => 'UTF-8',
+	'encoding'  => 'UTF-8',
 
 	/**
 	 * DateTime settings
@@ -94,6 +95,7 @@ return array(
 	 */
 	// 'server_gmt_offset'  => 0,
 	// 'default_timezone'   => null,
+	'default_timezone' => 'Asia/Tokyo',
 
 	/**
 	 * Logging Threshold.  Can be set to any of the following:
