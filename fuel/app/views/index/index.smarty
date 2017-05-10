@@ -1,0 +1,232 @@
+{View_Smarty::forge('parts/head')}
+{Asset::css('slick-theme.css')}{Asset::css('slick.css')}{Asset::css('slider-pro.min.css')}{* 最終的にはcloudfront.netにする *}{Asset::js('slick.min.js')}{Asset::js('jquery.sliderPro.min.js')}
+	<script>{literal}
+		$(function () {
+			$('.slider').slick({
+				autoplay: true,
+				autoplaySpeed: 4000,
+				speed: 3000,
+				lazyLoad: 'progressive',
+				arrows: false,
+				dots: false,
+				pauseOnHover: true,
+				accessibility: false,
+				fade: true,
+			});
+		});
+		$(function () {
+			$('.slider2').sliderPro({
+				autoScaleLayers: false,//キャプションの自動変形
+				waitForLayers: true,//キャプションのアニメーションが終了してからスライドするか
+				width: 1020,//横幅
+				autoplay: true,//自動再生
+				//fade: true,
+				fadeDuration: 2000,
+				arrows: true,//左右の矢印
+				buttons: false,//ナビゲーションボタン
+				slideDistance: 0,//スライド同士の距離
+			});
+		});
+	{/literal}</script>
+
+{View_Smarty::forge('parts/header')}
+
+	<!-- slide img --------------------------------------------------------------------------------------->
+	<article>
+		<!-- <ul class="slider">
+			<li class="sp-slide">{Asset::img('slide/cat0045-026.jpg')}</li>
+			<li class="sp-slide">{Asset::img('slide/32182002833.jpg')}</li>
+		</ul> -->
+
+		<div id="caption" class="slider2">
+			<div class="sp-slides">
+				<!-- <div class="sp-slide">
+					<a href="/">{Asset::img('slide/cat0045-026.jpg')}</a>
+					<p class="sp-layer sp-black sp-padding"
+					   data-horizontal="2%" data-vertical="4%" data-width="40%" data-position="bottomRight"
+					   data-show-transition="left" data-show-delay="800" data-hide-transition="right"
+					   data-hide-delay="600">
+						キャプション4 ディレイ有り
+					</p>
+				</div>
+				<div class="sp-slide">
+					<a href="/">{Asset::img('slide/32182002833.jpg')}</a>
+					<p class="sp-layer sp-black sp-padding"
+					   data-horizontal="2%" data-vertical="4%" data-width="40%" data-position="bottomRight"
+					   data-show-transition="left" data-show-delay="800" data-hide-transition="right"
+					   data-hide-delay="600">
+						キャプション4 ディレイ有りaaaaあああああああああああああああああああああああああああああ
+					</p>
+				</div> -->
+				<div class="sp-slide">
+					<a href="/">{Asset::img('slide/cat0045-026.jpg')}</a>
+					<p class="sp-layer sp-white sp-padding"
+					   data-horizontal="2%" data-vertical="4%" data-width="40%" data-position="bottomRight"
+					   data-show-transition="left" data-show-delay="200" data-hide-transition="right"
+					   data-hide-delay="400">
+						キャプション4 ディレイ有り
+					</p>
+				</div>
+				<div class="sp-slide">
+					<a href="/">{Asset::img('slide/32182002833.jpg')}</a>
+					<p class="sp-layer sp-white sp-padding"
+					   data-horizontal="2%" data-vertical="4%" data-width="40%" data-position="bottomRight"
+					   data-show-transition="left" data-show-delay="200" data-hide-transition="right"
+					   data-hide-delay="400">
+						キャプション4 ディレイ有り
+					</p>
+				</div>
+				<div class="sp-slide">
+					<a href="/">{Asset::img('slide/images.jpg')}</a>
+					<p class="sp-layer sp-white sp-padding"
+					   data-horizontal="2%" data-vertical="4%" data-width="40%" data-position="bottomRight"
+					   data-show-transition="left" data-show-delay="200" data-hide-transition="right"
+					   data-hide-delay="400">
+						キャプション4 ディレイ有り
+					</p>
+				</div>
+				<!--/ sp-slides--></div>
+			<!--/ caption--></div>
+	</article>
+	<!-- /slide img -------------------------------------------------------------------------------------->
+
+	<article class="table">
+		<!-- side menu --------------------------------------------------------------------------------------->
+		<aside class="col-xs-3 aside table-cell">
+			{if !Auth::check()}
+				{Html::anchor('user/input','新規ユーザ登録', ['class' => 'btn btn-warning col-xs-12 no-float'])}
+				<form class="panel panel-info login-box">
+					<div class="panel-heading"><h2 class="panel-title">ログイン</h2></div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="" for="uname">ユーザー名</label>
+							<input type="text" name="uname" value="" class="form-control" id="uname" placeholder="">
+						</div>
+						<div class="form-group">
+							<label class="">パスワード</label>
+							<input type="password" name="pass" class="form-control" id="" placeholder="">
+						</div>
+						<div class="checkbox form-group">
+							<label>
+								<input type="checkbox" checked name="rememberme">IDとパスワードを記憶<br/>
+							</label>
+						</div>
+						<div class="form-group">
+							<input type="submit" class="btn btn-info col-xs-12 no-float" value="ログイン">
+						</div>
+						<div class="form-group">
+							<a href="" class="glyphicon glyphicon-circle-arrow-right">パスワード紛失</a>
+						</div>
+					</div>
+				</form>
+			{else}
+
+			{/if}
+			{View_Smarty::forge('parts/side-adsence')}
+			<!-- <div class="adsense no-padding no-float table-cell"> -->
+		</aside>
+		<!-- /side menu -------------------------------------------------------------------------------------->
+
+		<!-- main -------------------------------------------------------------------------------------------->
+		<main class="col-xs-9 no-padding padding-top-10px table-cell">
+			{View_Smarty::forge('parts/main-adsence')}
+			<section class="col-xs-6">
+				<h2 class="h4 heading margin-bottom-20px">人気スポット</h2>
+				<h3 class="h4">{Asset::img('rank/1st-place.png', ['class' => 'rank-img'])}1位</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+				<h3 class="h4">{Asset::img('rank/2nd-place.png', ['class' => 'rank-img'])}2位</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+				<h3 class="h4">{Asset::img('rank/3rd-place.png', ['class' => 'rank-img'])}3位</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+				<h3 class="h4">4位</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+				<h3 class="h4">5位</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+
+			</section>
+			<section class="col-xs-6">
+				<h2 class="h4 heading margin-bottom-20px">新着スポット</h2>
+				<h3 class="h4">2017年10月10日</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+				<h3 class="h4">2017年10月10日</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+				<h3 class="h4">2017年10月10日</h3>
+				<div class="media">
+					<a href="" class="media-left col-xs-6 no-padding">
+						{Asset::img('jnl1512120001-p1.jpg', ['alt' => 'ご誕生寺', 'class' => 'img-responsive img-rounded'])}
+					</a>
+					<div class="col-xs-6">
+						<h4 class="media-heading text-navy">ご誕生寺</h4>
+						<p class="font-size-12px spot-desc">ああああああああああああああああああ<br>場所：福井県武生</p>
+						<p class="text-right"><a href="">＞＞詳細</a></p>
+					</div>
+				</div>
+			</section>
+		</main>
+		<!-- /main ------------------------------------------------------------------------------------------->
+	</article>
+
+{View_Smarty::forge('parts/footer')}

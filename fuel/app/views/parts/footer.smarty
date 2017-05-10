@@ -1,0 +1,24 @@
+<footer class="footer">
+	<div class="table text-muted footer-menu">
+		<nav class="col-xs-8 table-cell">
+			<ul class="list-style-circlearrow line-height2_5em">
+				<li class="col-xs-4">{Html::anchor('/','運営者について')}</li>
+				<li class="col-xs-4">{Html::anchor('/','利用規約')}</li>
+				<li class="col-xs-4">{Html::anchor('/','プライバシーポリシー')}</li>
+				<li class="col-xs-4">{Html::anchor('/','広告掲載について')}</li>
+				<li class="col-xs-4">{Html::anchor('/','ねこM@Pとは')}</li>
+				<li class="col-xs-4">{Html::anchor('/','お問い合わせ')}</li>
+			</ul>
+		</nav>
+		<div class="col-xs-offset-1 col-xs-3 table-cell">
+			{Html::anchor('/',{Asset::img('logo/footer-logo.png')})}
+		</div>
+	</div>
+	<p class="font-size-12px text-center copyright">
+		Copyright &copy; {$smarty.now|date_format:'%Y'} {Html::anchor('/','ねこM@P')} All Rights Reserved.
+	</p>
+</footer>
+<!-- /footer ----------------------------------------------------------------------------------------->
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+		{View_Smarty::forge('parts/main-adsence')}
+		<h2 class="h4 heading margin-bottom-20px">新規ユーザー登録</h2>
+		{Form::open(['action' => 'user/input/confirm', 'class' => 'form-horizontal panel panel-info'])}
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;ユーザー登録
+			</h3>
+		</div>
+		<div class="panel-body">
+			{if $username}
+				<div class="alert alert-danger">{$username}</div>
+			{/if}
+			<div class="form-group">
+				{Form::label('ユーザー名', 'username', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{Form::input('username', Input::post('username'), ['class' => 'form-control'])}
+				</div>
+			</div>
+			{if $password}
+				<div class="alert alert-danger">{$password}</div>
+			{/if}
+			<div class="form-group">
+				{Form::label('パスワード', 'password', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{Form::password('password', Input::post('password'), ['class' => 'form-control'])}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('パスワード（確認）', 'password_confirm', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{Form::password('password_confirm', Input::post('password_confirm'), ['class' => 'form-control'])}
+				</div>
+			</div>
+			{if $email}
+				<div class="alert alert-danger">{$email}</div>
+			{/if}
+			<div class="form-group">
+				{Form::label('メールアドレス', 'email', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{Form::input('email', Input::post('email'), ['class' => 'form-control'])}
+				</div>
+			</div>
+			{if $agree}
+				<div class="alert alert-danger">{$agree}</div>
+			{/if}
+			<div class="form-group">
+				{Form::label('利用規約', '', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					<div class="checkbox">
+					<label class="">
+						{Form::checkbox('agree', 'on')}
+						利用規約に同意する
+					</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-10 col-sm-offset-3">
+					{Form::submit('submit', '送信', ['class' => 'btn btn-primary'])}
+				</div>
+			</div>
+		</div>
+		{Form::close()}
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}
