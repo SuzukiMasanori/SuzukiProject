@@ -1,0 +1,20 @@
+{View_Smarty::forge('parts/common-from-head-to-main-adsence')}
+<h2 class="h4 heading margin-bottom-20px">マイページ</h2>
+{if Auth::check()}
+	{View_Smarty::forge('parts/mypage-nav')}
+	<div class="form-horizontal panel panel-warning">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;プロフィールの編集完了
+			</h3>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-success">プロフィールを編集しました</div>
+		</div>
+	</div>
+{else}
+	{View_Smarty::forge('parts/no-login')}
+{/if}
+</main>
+</article>
+{View_Smarty::forge('parts/footer')}

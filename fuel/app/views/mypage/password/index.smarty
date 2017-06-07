@@ -1,0 +1,53 @@
+{View_Smarty::forge('parts/common-from-head-to-main-adsence')}
+<h2 class="h4 heading margin-bottom-20px">マイページ</h2>
+{if Auth::check()}
+	{View_Smarty::forge('parts/mypage-nav')}
+	{Form::open(['action' => '/mypage/password/modify', 'class' => 'form-horizontal panel panel-warning'])}
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;パスワード変更
+		</h3>
+	</div>
+	<div class="panel-body">
+		{if $password}
+			<div class="alert alert-danger">{$password}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('現在のパスワード', 'password', ['class' => 'control-label col-sm-4'])}
+			<div class="col-sm-8">
+				{Form::password('password', '', ['class' => 'form-control'])}
+			</div>
+		</div>
+		<hr>
+		{if $new_password}
+			<div class="alert alert-danger">{$new_password}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('パスワードの変更', 'new_password', ['class' => 'control-label col-sm-4'])}
+			<div class="col-sm-8">
+				{Form::password('new_password', '', ['class' => 'form-control'])}
+			</div>
+			<p class="help-block col-sm-offset-4 col-sm-8">最大50文字まで</p>
+		</div>
+		{if $new_password_confirm}
+			<div class="alert alert-danger">{$new_password_confirm}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('パスワードの変更(確認)', 'new_password_confirm', ['class' => 'control-label col-sm-4'])}
+			<div class="col-sm-8">
+				{Form::password('new_password_confirm', '', ['class' => 'form-control'])}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-8 col-sm-offset-4">
+				{Form::submit('submit', 'パスワードを変更する', ['class' => 'btn btn-primary'])}
+			</div>
+		</div>
+	</div>
+	{Form::close()}
+{else}
+	{View_Smarty::forge('parts/no-login')}
+{/if}
+</main>
+</article>
+{View_Smarty::forge('parts/footer')}

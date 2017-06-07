@@ -1,0 +1,89 @@
+{View_Smarty::forge('parts/common-from-head-to-main-adsence')}
+<h2 class="h4 heading margin-bottom-20px">マイページ</h2>
+{if Auth::check()}
+	{View_Smarty::forge('parts/mypage-nav')}
+	{Form::open(['action' => '/mypage/profile/confirm', 'class' => 'form-horizontal panel panel-warning', 'enctype'=>'multipart/form-data'])}
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;プロフィールの編集（入力）
+		</h3>
+	</div>
+	<div class="panel-body">
+		{if $username}
+			<div class="alert alert-danger">{$username}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('ユーザー名', 'username', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{if Input::post('username')}
+					{Form::input('username', Input::post('username'), ['class' => 'form-control'])}
+				{else}
+					{Form::input('username', Auth::get_screen_name(), ['class' => 'form-control'])}
+				{/if}
+			</div>
+			<p class="help-block col-sm-offset-3 col-sm-9">最大50文字まで。ユーザー名を変更した場合は再ログインが必要です</p>
+		</div>
+		{if $email}
+			<div class="alert alert-danger">{$email}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('メールアドレス', 'email', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{if Input::post('email')}
+					{Form::input('email', Input::post('email'), ['class' => 'form-control'])}
+				{else}
+					{Form::input('email', Auth::get('email'), ['class' => 'form-control'])}
+				{/if}
+			</div>
+		</div>
+		{if $pr}
+			<div class="alert alert-danger">{$pr}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('自己紹介（PR）', 'pr', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{if Input::post('pr')}
+					{Form::textarea('pr', Input::post('pr'), ['class' => 'form-control', 'rows' => 6, 'cols' => 8])}
+				{else}
+					{Form::textarea('pr', Auth::get('pr'), ['class' => 'form-control', 'rows' => 6, 'cols' => 8])}
+				{/if}
+			</div>
+			<p class="help-block col-sm-offset-3 col-sm-9">最大1,000文字まで</p>
+		</div>
+		{if $cat}
+			<div class="alert alert-danger">{$cat}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('好きな猫', 'cat', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{if Input::post('cat')}
+					{Form::input('cat', Input::post('cat'), ['class' => 'form-control'])}
+				{else}
+					{Form::input('cat', Auth::get('cat'), ['class' => 'form-control'])}
+				{/if}
+			</div>
+			<p class="help-block col-sm-offset-3 col-sm-9">最大50文字まで</p>
+		</div>
+		{if $image}
+			<div class="alert alert-danger">{$image}</div>
+		{/if}
+		<div class="form-group">
+			{Form::label('サムネイル画像', 'image', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{Form::file('image')}
+			</div>
+			<p class="help-block col-sm-offset-3 col-sm-9">1MB以下のjpeg画像</p>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-offset-3">
+				{Form::submit('submit', '送信', ['class' => 'btn btn-primary'])}
+			</div>
+		</div>
+	</div>
+	{Form::close()}
+{else}
+	{View_Smarty::forge('parts/no-login')}
+{/if}
+</main>
+</article>
+{View_Smarty::forge('parts/footer')}

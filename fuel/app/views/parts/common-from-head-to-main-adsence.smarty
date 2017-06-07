@@ -1,0 +1,8 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+{View_Smarty::forge('parts/main-adsence')}

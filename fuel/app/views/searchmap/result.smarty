@@ -1,0 +1,82 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	{View_Smarty::forge('parts/google-map-include')}
+	<script type="text/javascript">
+		google.maps.event.addDomListener(window, "load", function () {
+
+			// 初期地図表示
+			var map = document.getElementById('map');
+			var mapCanvas = new google.maps.Map(map, {
+				zoom: 9,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			});
+			//var bounds;
+			var geocoder = new google.maps.Geocoder();
+			geocoder.geocode(
+						{literal}{
+					address:{/literal}'{if Input::post('address')}{Input::post('address')|escape}{else}{Input::get('pref')|escape}{/if}'{literal} ,
+					region: 'jp'
+				}{/literal},
+				function (results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						var result = results[0];
+						var bounds = {
+							b_b: result.geometry.bounds.b.b,
+							b_f: result.geometry.bounds.b.f,
+							f_b: result.geometry.bounds.f.b,
+							f_f: result.geometry.bounds.f.f
+						};
+						{if Input::post('address')}
+						if ("viewport" in result.geometry) {
+							mapCanvas.fitBounds(result.geometry.viewport);
+						} else if ("bounds" in result.geometry) {
+							mapCanvas.fitBounds(result.geometry.bounds);
+						}
+						{else}
+						mapCanvas.panTo(result.geometry.location);
+						{/if}
+
+						$.ajax({
+							url: '{Uri::create('/searchmap/rest/latlng.json')}',
+							type: 'POST',
+							data: bounds
+						}).done(function (data, status, xhr) {
+							// 通信成功時の処理
+							for (var i in data) {
+								new google.maps.Marker({
+									map: mapCanvas,
+									position: new google.maps.LatLng(data[i]['lat'], data[i]['lng'])
+								});
+							}
+						}).fail(function (xhr, status, error) {
+							console.log(error);
+						});
+					}
+				}
+			);
+			// 地図のズームアウトや移動の処理、ajaxも共通化///////////////////////////////////////////////////////////////ここからピンけしも必要
+
+
+			// 地図をクリックしたら座標をGETパラメータを持って遷移
+//			google.maps.event.addListener(mapCanvas, 'click', function (event) {
+//				//alert(event.latLng);
+//				/*new google.maps.InfoWindow({
+//				 position: event.latLng,
+//				 content: event.latLng.toString()
+//				 }).open(mapCanvas);*/
+//				location.href = '/registermap/input/?lat=' + event.latLng.lat() + '&lng=' + event.latLng.lng();
+//			});
+
+		});
+	</script>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+		<h2 class="h4 heading margin-bottom-20px">マップ検索</h2>
+		<div id="map"></div>
+		選択した県や入力した場所での一覧表示
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}

@@ -1,0 +1,13 @@
+<!-- {Uri::string()}
+{if Uri::string()|regex_replace:"/[^(test)]/":"" ne ""} active{/if}
+-->
+<ul class="nav nav-tabs" style="margin-bottom: 10px">
+	<li{if Uri::string()|regex_replace:"/.*index.*/":"on" eq "on"} class="active"{/if}><a href="/mypage/index">プロフィール </a>
+	</li>
+	<li{if Uri::string()|regex_replace:"/.*profile.*/":"on" eq "on"} class="active"{/if}><a href="/mypage/profile">プロフィールの編集</a>
+	</li>
+	<li{if Uri::string()|regex_replace:"/.*password.*/":"on" eq "on"} class="active"{/if}><a href="/mypage/password">パスワードの変更</a>
+	</li>
+	<li{if Uri::string()|regex_replace:"/.*leave.*/":"on" eq "on"} class="active"{/if}><a href="/mypage/leave">退会</a>
+	</li>
+</ul>

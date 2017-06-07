@@ -1,0 +1,15 @@
+{View_Smarty::forge('parts/common-from-head-to-main-adsence')}
+<h2 class="h4 heading margin-bottom-20px">マイページ</h2>
+{View_Smarty::forge('parts/mypage-nav')}
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>&nbsp;退会
+		</h3>
+	</div>
+	<div class="panel-body">
+		<div class="alert alert-success">登録されたユーザーアカウントを削除しました。ご利用ありがとうございました。</div>
+	</div>
+</main>
+</article>
+{View_Smarty::forge('parts/footer')}

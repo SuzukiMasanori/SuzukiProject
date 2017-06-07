@@ -19,7 +19,7 @@
 	{Html::meta('keywords', 'ねこ,猫,ぬこ,にゃんこ,ニャンコ,ニャー,cat,猫地図,catmap')}
 	{Html::meta('description', 'ねこに会える場所を共有')}
 	{Html::meta('viewport', 'width=device-width,initial-scale=1.0,maximum-scale=1')}
-	<title>ねこマップ</title>{* <title>{$title}</title> *}
+	<title>猫マップ｜{$title}</title>{* <title>{$title}</title> *}
 	<link rel="icon" href="{Asset::get_file('icon.ico', 'img')}" type="image/x-icon"/>
 	<link rel="shortcut icon" href="{Asset::get_file('icon.ico', 'img')}" type="image/x-icon"/>
 	<!-- <link href="{Asset::get_file('icon.ico', 'img')}" rel="shortcut icon">

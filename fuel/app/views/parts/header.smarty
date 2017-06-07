@@ -14,7 +14,7 @@
 			<h1 class="col-xs-3 no-padding no-float table-cell">
 				{Html::anchor('/',Asset::img('logo/title-logo.png', ["alt" => "ねこM@P", "class" => "col-xs-12 no-padding"]))}
 			</h1>
-			<div class="col-xs-3 no-float table-cell"><p>ねこと会えるコミュニティスポット共有サイト。みんなで広げよう猫の輪</p></div>
+			<div class="col-xs-3 no-float table-cell"><p>ねこと会えるコミュニティスポット共有サイト。みんなで広げよう猫の輪{Fuel::$env}</p></div>
 			<div class="col-xs-6 adsense no-padding no-float table-cell">
 				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 				<!-- 728 --><!-- 本運用時はdata-ad-test="on"を外すこと -->
@@ -32,20 +32,20 @@
 		<div>
 			<nav class="table-cell">
 				<ul class="nav">
-					<li><a href="#" class="search_map">マップ検索</a></li>
-					<li><a href="#" class="reg_map">新規地点登録</a></li>
+					<li><a href="/searchmap/index" class="search_map{if Uri::string()|regex_replace:"/.*searchmap.*/":"on" eq "on"} active{/if}">マップ検索</a></li>
+					<li><a href="/registermap/index" class="reg_map{if Uri::string()|regex_replace:"/.*registermap.*/":"on" eq "on"} active{/if}">新規地点登録</a></li>
 					<li><a href="#" class="list_map">マイ地点一覧</a></li>
-					<li><a href="#" class="mypage">マイページ</a></li>
+					<li><a href="/mypage/index" class="mypage{if Uri::string()|regex_replace:"/.*mypage.*/":"on" eq "on"} active{/if}">マイページ</a></li>
 					<li><a href="#" class="question">猫マップとは</a></li>
 				</ul>
 			</nav>
 			<div class="table-cell text-right login-status">
-				ようこそ{Fuel::$env}{if Auth::check()}{Auth::get_screen_name()}{else}ゲスト{/if}さん<br>
+				ようこそ{if Auth::check()}{Auth::get_screen_name()}{else}ゲスト{/if}さん<br>
 				{if Auth::check()}
-				<a href="" class="btn btn-success">ログアウト</a>
+					{Html::anchor('/user/login/logout','ログアウト', ['class' => 'btn btn-success'])}
 				{else}
-				<a href="" class="btn btn-info">ログイン</a>
-				{Html::anchor('user/input','ユーザ登録', ['class' => 'btn btn-warning'])}
-			{/if}
-		</div>
+					{Html::anchor('/user/login','ログイン', ['class' => 'btn btn-info'])}
+					{Html::anchor('/user/input','ユーザ登録', ['class' => 'btn btn-warning'])}
+				{/if}
+			</div>
 	</header>

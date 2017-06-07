@@ -1,0 +1,157 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+
+		<h2 class="h4 heading margin-bottom-20px">新規地点登録</h2>
+		{if Auth::check()}
+			{View_Smarty::forge('parts/google-map-include')}
+			<script type="text/javascript">
+				google.maps.event.addDomListener(window, "load", function () {
+
+					var map = document.getElementById('small_map');
+					var latLng = new google.maps.LatLng({if Input::get('lat')}{Input::get('lat')}{else}{Session::get('lat')}{/if},{if Input::get('lng')}{Input::get('lng')}{else}{Session::get('lng')}{/if});
+					var mapCanvas = new google.maps.Map(map, {
+						zoom: 18,
+						mapTypeId: google.maps.MapTypeId.ROADMAP,
+						center: latLng
+					});
+					var marker = new google.maps.Marker({
+						map: mapCanvas,
+						position: latLng
+					});
+				});
+
+				$(function () {
+					$('input[name="friendly"]').change(function () {
+						var friendlyVal = $(this).val();
+						var stars = "";
+						for (var i = 0; i < friendlyVal; i++) stars += "★";
+						$('#friendly_star').text(stars);
+					});
+				});
+			</script>
+			<div id="small_map"></div>
+			{Form::open(['action' => '/registermap/input/confirm', 'class' => 'form-horizontal padding-top-20px', 'enctype'=>'multipart/form-data'])}
+			{Form::csrf()}
+			<div class="form-group">
+				{Form::label('地名', 'address', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{if $address}
+						<div class="alert alert-danger">{$address}</div>
+					{/if}
+					{if Input::post('address')}
+						{Form::input('address', Input::post('address'), ['class' => 'form-control'])}
+					{else}
+						{Form::input('address', $geo_address, ['class' => 'form-control'])}
+					{/if}
+				</div>
+				<p class="help-block col-sm-offset-3 col-sm-9"><span class="label label-danger">必須</span>　詳細な地名をご希望により追記してください。最大50文字まで
+				</p>
+			</div>
+			<div class="form-group">
+				{Form::label('地点タイトル', 'place', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{if $place}
+						<div class="alert alert-danger">{$place}</div>
+					{/if}
+					{Form::input('place', Input::post('place'), ['class' => 'form-control'])}
+				</div>
+				<p class="help-block col-sm-offset-3 col-sm-9"><span class="label label-danger">必須</span>　例：ねこの楽園島、田代島。最大50文字まで
+				</p>
+			</div>
+			<div class="form-group">
+				{Form::label('概要(説明)', 'desc', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{if $desc}
+						<div class="alert alert-danger">{$desc}</div>
+					{/if}
+					{Form::textarea('desc', Input::post('desc'), ['class' => 'form-control', 'rows' => 6, 'cols' => 8])}
+				</div>
+				<p class="help-block col-sm-offset-3 col-sm-9">最大1,000文字まで</p>
+			</div>
+			<div class="form-group">
+				{Form::label('匹数', 'num', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-2">
+					{if $num}
+						<div class="alert alert-danger">{$num}</div>
+					{/if}
+					{Form::select('num', Input::post('num'), $numbers, ['class' => 'form-control'])}
+				</div>
+				<p class="help-block col-sm-offset-3 col-sm-9">おおよそで構いません上限数値については考える必要あり</p>
+			</div>
+			<div class="form-group">
+				{Form::label('地点タイプ', 'type', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-3">
+					{if $type}
+						<div class="alert alert-danger">{$type}</div>
+					{/if}
+					{Form::select('type', Input::post('type'), $types, ['class' => 'form-control'])}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('駐車', 'parking', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-3">
+					{if $parking}
+						<div class="alert alert-danger">{$parking}</div>
+					{/if}
+					{Form::select('parking', Input::post('parking'), $parkings, ['class' => 'form-control'])}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('餌やり', '', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{if $feed}
+						<div class="alert alert-danger">{$feed}</div>
+					{/if}
+					<label class="radio-inline">{Form::radio('feed', 1, Input::post('feed') == 1)}可</label>
+					<label class="radio-inline">{Form::radio('feed', 2, Input::post('feed') == 2)}不可</label>
+					<label class="radio-inline">
+						{if Input::post('feed')}
+							{Form::radio('feed', 3, Input::post('feed') == 3)}
+						{else}
+							{Form::radio('feed', 3, true)}
+						{/if}
+						不明
+					</label>
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('なつき度(5段階)', 'friendly', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-3">
+					{if $friendly}
+						<div class="alert alert-danger">{$friendly}</div>
+					{/if}
+					<input type="range" name="friendly" min="0" max="5" step="1"
+						   value="{if Input::post('friendly')}{Input::post('friendly')}{else}0{/if}">
+					<span id="friendly_star">{if Input::post('friendly')}{section name=i start=0 loop=Input::post('friendly')}★{/section}{/if}</span>
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('サムネイル画像', 'image', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{if $image}
+						<div class="alert alert-danger">{$image}</div>
+					{/if}
+					{Form::file('image')}
+				</div>
+				<p class="help-block col-sm-offset-3 col-sm-9">1MB以下の画像</p>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-9 col-sm-offset-3">
+					{Form::submit('submit', '送信', ['class' => 'btn btn-primary'])}
+				</div>
+			</div>
+			{Form::close()}
+			<hr>
+			{View_Smarty::forge('parts/main-adsence')}
+		{else}
+			{View_Smarty::forge('parts/main-adsence')}
+			{View_Smarty::forge('parts/no-login')}
+		{/if}
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}

@@ -1,0 +1,81 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{Form::open(['action' => '/searchmap/result', 'class' => 'panel panel-info'])}
+		<div class="panel-heading"><h2 class="panel-title">地名入力検索</h2></div>
+		<div class="panel-body">
+			<div class="form-group">
+				{Form::input('address', '', ['class' => 'form-control', 'placeholder' => '検索したい地名を入力'])}
+			</div>
+			<div class="form-group">
+				<input type="submit" class="btn btn-info col-xs-12 no-float" value="検索">
+			</div>
+		</div>
+		{Form::close()}
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+		<h2 class="h4 heading margin-bottom-20px">マップ検索</h2>
+		<div class="text-center">
+			{Asset::img('searchmap/japan_map.png', ['alt' => '', 'usemap' => '#japan'])}
+			<map name="japan">
+				<area shape="rect" coords="555,4,695,124" alt="北海道" href="/searchmap/result/?pref=hokkaido">
+				<area shape="rect" coords="555,138,671,172" alt="青森" href="/searchmap/result/?pref=aomoriken">
+				<area shape="rect" coords="555,178,623,211" href="/searchmap/result/?pref=akitaken" alt="秋田">
+				<area shape="rect" coords="629,178,671,211" href="/searchmap/result/?pref=iwatenken" alt="岩手">
+				<area shape="rect" coords="555,216,623,250" href="/searchmap/result/?pref=yamagataken" alt="山形">
+				<area shape="rect" coords="629,216,671,250" href="/searchmap/result/?pref=miyagiken" alt="宮城">
+				<area shape="rect" coords="555,254,671,287" href="/searchmap/result/?pref=fukushimaken" alt="福島">
+				<area shape="rect" coords="555,292,623,327" href="/searchmap/result/?pref=gunnmaken" alt="群馬">
+				<area shape="rect" coords="629,292,671,327" href="/searchmap/result/?pref=totigiken" alt="栃木">
+				<area shape="rect" coords="555,331,623,364" href="/searchmap/result/?pref=saitamaken" alt="埼玉">
+				<area shape="rect" coords="629,331,671,364" href="/searchmap/result/?pref=ibarakiken" alt="茨城">
+				<area shape="rect" coords="555,369,623,403" href="/searchmap/result/?pref=toukyouto" alt="東京">
+				<area shape="rect" coords="629,370,671,441" href="/searchmap/result/?pref=chibaken" alt="千葉">
+				<area shape="rect" coords="555,408,623,441" href="/searchmap/result/?pref=kanagawaken" alt="神奈川">
+				<area shape="rect" coords="483,204,528,237" href="/searchmap/result/?pref=sado" alt="佐渡">
+				<area shape="rect" coords="408,254,452,287" href="/searchmap/result/?pref=ishikawaken" alt="石川">
+				<area shape="rect" coords="457,254,501,287" href="/searchmap/result/?pref=toyamaken" alt="富山">
+				<area shape="rect" coords="506,254,550,287" href="/searchmap/result/?pref=niigataken" alt="新潟">
+				<area shape="rect" coords="408,292,452,327" href="/searchmap/result/?pref=fukuiken" alt="福井">
+				<area shape="rect" coords="457,292,501,364" href="/searchmap/result/?pref=gifuken" alt="岐阜">
+				<area shape="rect" coords="506,292,550,364" href="/searchmap/result/?pref=naganoken" alt="長野">
+				<area shape="rect" coords="457,369,501,403" href="/searchmap/result/?pref=aichiken" alt="愛知">
+				<area shape="rect" coords="506,369,550,403" href="/searchmap/result/?pref=yamanashiken" alt="山梨">
+				<area shape="rect" coords="506,408,550,441" href="/searchmap/result/?pref=shizuokaken" alt="静岡">
+				<area shape="rect" coords="309,331,354,364" href="/searchmap/result/?pref=hyougoken" alt="兵庫">
+				<area shape="rect" coords="358,331,402,364" href="/searchmap/result/?pref=kyoutofu" alt="京都">
+				<area shape="rect" coords="408,331,452,364" href="/searchmap/result/?pref=shigaken" alt="滋賀">
+				<area shape="rect" coords="309,370,354,403" href="/searchmap/result/?pref=oosakafu" alt="大阪">
+				<area shape="rect" coords="358,369,402,403" href="/searchmap/result/?pref=naraken" alt="奈良">
+				<area shape="rect" coords="408,370,452,403" href="/searchmap/result/?pref=mieken" alt="三重">
+				<area shape="rect" coords="309,408,402,441" href="/searchmap/result/?pref=wakayamaken" alt="和歌山">
+				<area shape="rect" coords="163,331,207,403" href="/searchmap/result/?pref=yamaguchiken" alt="山口">
+				<area shape="rect" coords="211,331,256,364" href="/searchmap/result/?pref=shimaneken" alt="島根">
+				<area shape="rect" coords="260,331,304,364" href="/searchmap/result/?pref=tottoriken" alt="鳥取">
+				<area shape="rect" coords="211,370,256,403" href="/searchmap/result/?pref=hiroshimaken" alt="広島">
+				<area shape="rect" coords="260,370,305,404" href="/searchmap/result/?pref=okayamaken" alt="岡山">
+				<area shape="rect" coords="197,417,242,451" href="/searchmap/result/?pref=ehimeken" alt="愛媛">
+				<area shape="rect" coords="246,417,291,451" href="/searchmap/result/?pref=kagawaken" alt="香川">
+				<area shape="rect" coords="197,456,242,489" href="/searchmap/result/?pref=kouchiken" alt="高知">
+				<area shape="rect" coords="246,456,291,489" href="/searchmap/result/?pref=tokushimaken" alt="徳島">
+				<area shape="rect" coords="5,366,48,401" href="/searchmap/result/?pref=sagaken" alt="佐賀">
+				<area shape="rect" coords="54,366,98,401" href="/searchmap/result/?pref=fukuokaken" alt="福岡">
+				<area shape="rect" coords="103,366,147,401" href="/searchmap/result/?pref=ooitaken" alt="大分">
+				<area shape="rect" coords="5,405,48,438" href="/searchmap/result/?pref=nagasakiken" alt="長崎">
+				<area shape="rect" coords="54,405,98,438" href="/searchmap/result/?pref=kumamotoken" alt="熊本">
+				<area shape="rect" coords="103,405,147,476" href="/searchmap/result/?pref=miyazakiken" alt="宮崎">
+				<area shape="rect" coords="5,443,98,476" href="/searchmap/result/?pref=kagoshimaken" alt="鹿児島">
+				<area shape="rect" coords="5,496,48,530" href="/searchmap/result/?pref=okinawaken" alt="沖縄">
+			</map>
+			<p id="map_search_note" class="text-left">
+				<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+				検索したい都道府県をクリックしてください。
+			</p>
+		</div>
+		<!-- <div id="map"></div> -->
+		{View_Smarty::forge('parts/main-adsence')}
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}

@@ -1,0 +1,65 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+		{View_Smarty::forge('parts/main-adsence')}
+		<h2 class="h4 heading margin-bottom-20px">マイページ</h2>
+		{if Auth::check()}
+			{View_Smarty::forge('parts/mypage-nav')}
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;プロフィール
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="col-xs-3">
+						{if $user_image}
+							{Asset::img($user_image, ["class" => "col-xs-12 no-padding"])}
+						{else}
+							{Asset::img('user/no-image.png', ["alt" => "NoImage", "class" => "col-xs-12 no-padding"])}
+						{/if}
+					</div>
+					<div class="col-xs-9">
+						<table class="table col-xs-9">
+							<tr>
+								<th>ユーザー名</th>
+								<td>{Auth::get_screen_name()}</td>
+							</tr>
+							<tr>
+								<th>e-mail</th>
+								<td>{Auth::get_email()}</td>
+							</tr>
+							<tr>
+								<th>自己紹介（PR）</th>
+								<td>{Auth::get('pr')}</td>
+							</tr>
+							<tr>
+								<th>好きな猫</th>
+								<td>{Auth::get('cat')}</td>
+							</tr>
+							<tr>
+								<th>登録日</th>
+								<td>{Auth::get('created_at')|date_format:"%Y年%m月%d日　%H:%M:%S"}</td>
+							</tr>
+							<tr>
+								<th>更新日</th>
+								<td>{if Auth::get('updated_at') != 0}{Auth::get('updated_at')|date_format:"%Y年%m月%d日　%H:%M:%S"}{/if}</td>
+							</tr>
+							<tr>
+								<th>{Html::anchor('/mypage/profile','編集する', ['class' => 'btn btn-primary'])}</th>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		{else}
+			{View_Smarty::forge('parts/no-login')}
+		{/if}
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}

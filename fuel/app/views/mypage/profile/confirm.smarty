@@ -1,0 +1,58 @@
+{View_Smarty::forge('parts/common-from-head-to-main-adsence')}
+<h2 class="h4 heading margin-bottom-20px">マイページ</h2>
+{if Auth::check()}
+	{View_Smarty::forge('parts/mypage-nav')}
+	{Form::open(['action' => '/mypage/profile/modify', 'class' => 'form-horizontal panel panel-warning'])}
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;プロフィールの編集（確認）
+		</h3>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			{Form::label('ユーザ名', 'username', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{Form::input('username', Input::post('username'), ['class' => 'form-control', 'readonly' => 'readonly'])}
+			</div>
+		</div>
+		<div class="form-group">
+			{Form::label('メールアドレス', 'email', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{Form::input('email', Input::post('email'), ['class' => 'form-control', 'readonly' => 'readonly'])}
+			</div>
+		</div>
+		<div class="form-group">
+			{Form::label('自己紹介（PR）', 'pr', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{Form::textarea('pr', Input::post('pr'), ['class' => 'form-control', 'rows' => 6, 'cols' => 8, 'readonly' => 'readonly'])}
+			</div>
+		</div>
+		<div class="form-group">
+			{Form::label('好きな猫', 'cat', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{Form::input('cat', Input::post('cat'), ['class' => 'form-control', 'readonly' => 'readonly'])}
+			</div>
+		</div>
+		<div class="form-group">
+			{Form::label('サムネイル画像', 'image', ['class' => 'control-label col-sm-3'])}
+			<div class="col-sm-9">
+				{if $user_image}
+					{Asset::img("user/$user_image", ["class" => "no-padding", 'width' => '182'])}
+				{else}
+					{Asset::img('user/no-image.png', ["alt" => "NoImage", "class" => "col-xs-12 no-padding"])}
+				{/if}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-9 col-sm-offset-3">
+				{Form::submit('submit', '以上の内容で更新します', ['class' => 'btn btn-primary'])}
+			</div>
+		</div>
+	</div>
+	{Form::close()}
+{else}
+	{View_Smarty::forge('parts/no-login')}
+{/if}
+</main>
+</article>
+{View_Smarty::forge('parts/footer')}

@@ -1,0 +1,9 @@
+<p class="alert alert-danger">このページはログインすると使用可能になります</p>
+<div class="clearfix margin-bottom-20px">
+	<p class="col-xs-4">アカウントをお持ちの方　＞＞</p>
+	<div class="col-xs-8">{Html::anchor('/user/login','ログイン', ['class' => 'btn btn-info'])}</div>
+</div>
+<div class="clearfix">
+	<p class="col-xs-4">アカウントをお持ちでない方　＞＞</p>
+	<div class="col-xs-8">{Html::anchor('/user/input','ユーザ登録', ['class' => 'btn btn-warning'])}</div>
+</div>

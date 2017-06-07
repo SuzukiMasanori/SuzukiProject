@@ -1,0 +1,11 @@
+{View_Smarty::forge('parts/common-from-head-to-main-adsence')}
+<h2 class="h4 heading margin-bottom-20px">新規地点登録</h2>
+{if Auth::check()}
+<div class="alert alert-success">地点登録を完了しました。</div>
+	地点投稿へ移動する<br>編集する
+{else}
+	{View_Smarty::forge('parts/no-login')}
+{/if}
+</main>
+</article>
+{View_Smarty::forge('parts/footer')}

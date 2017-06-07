@@ -1,0 +1,127 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+
+		<h2 class="h4 heading margin-bottom-20px">新規地点登録</h2>
+		{if Auth::check()}
+			{View_Smarty::forge('parts/google-map-include')}
+			<script type="text/javascript">
+				google.maps.event.addDomListener(window, "load", function () {
+
+					var map = document.getElementById('small_map');
+					var latLng = new google.maps.LatLng({Session::get('lat')},{Session::get('lng')});
+					var mapCanvas = new google.maps.Map(map, {
+						zoom: 18,
+						mapTypeId: google.maps.MapTypeId.ROADMAP,
+						center: latLng
+					});
+					var marker = new google.maps.Marker({
+						map: mapCanvas,
+						position: latLng
+					});
+				});
+			</script>
+			<div id="small_map"></div>
+			{Form::open(['action' => '/registermap/input/register', 'class' => 'form-horizontal padding-top-20px', 'enctype'=>'multipart/form-data'])}
+			{Form::csrf()}
+			<div class="form-group">
+				{Form::label('地名', 'address', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{Form::input('address', Input::post('address'), ['class' => 'form-control', 'readonly' => 'readonly'])}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('地点タイトル', 'place', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{Form::input('place', Input::post('place'), ['class' => 'form-control', 'readonly' => 'readonly'])}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('概要(説明)', 'desc', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{Form::textarea('desc', Input::post('desc'), ['class' => 'form-control', 'rows' => 6, 'cols' => 8, 'readonly' => 'readonly'])}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('匹数', 'num', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-2">
+					{Form::input('num', Input::post('num'), ['class' => 'form-control', 'readonly' => 'readonly'])}
+				</div>
+				<div class="col-sm-2 padding-top-10px">匹	</div>
+			</div>
+			<div class="form-group">
+				{Form::label('地点タイプ', 'type', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-3">
+					{Form::input('', $type, ['class' => 'form-control', 'readonly' => 'readonly'])}
+					{Form::hidden('type', Input::post('type'))}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('駐車', 'parking', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-3">
+					{Form::input('', $parking, ['class' => 'form-control', 'readonly' => 'readonly'])}
+					{Form::hidden('parking', Input::post('parking'))}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('餌やり', '', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						{if Input::post('feed') == 1}
+							{Form::radio('', 1, true, ['checked' => 'checked'])}
+						{else}
+							{Form::radio('', 1, false, ['disabled' => 'disabled'])}
+						{/if}可
+					</label>
+					<label class="radio-inline">
+						{if Input::post('feed') == 2}
+							{Form::radio('', 2, true, ['checked' => 'checked'])}
+						{else}
+							{Form::radio('', 2, false, ['disabled' => 'disabled'])}
+						{/if}不可</label>
+					<label class="radio-inline">
+						{if Input::post('feed') == 3}
+							{Form::radio('', 3, true, ['checked' => 'checked'])}
+						{else}
+							{Form::radio('', 3, false, ['disabled' => 'disabled'])}
+						{/if}不明</label>
+					{Form::hidden('feed', Input::post('feed'))}
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('なつき度(5段階)', 'friendly', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-3">
+					{Form::hidden('friendly', Input::post('friendly'))}
+					<span id="friendly_star">{if Input::post('friendly')}{section name=i start=0 loop=Input::post('friendly')}★{/section}{/if}</span>
+				</div>
+			</div>
+			<div class="form-group">
+				{Form::label('サムネイル画像', 'image', ['class' => 'control-label col-sm-3'])}
+				<div class="col-sm-9">
+					{if $user_image}
+						{Asset::img("registermap/$user_image", ["class" => "no-padding", 'width' => '300'])}
+					{else}
+						画像なし
+					{/if}
+				</div>
+				<p class="help-block col-sm-offset-3 col-sm-9">1MB以下の画像</p>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-9 col-sm-offset-3">
+					{Form::submit('submit', '以上の内容で登録します', ['class' => 'btn btn-primary'])}
+				</div>
+			</div>
+			{Form::close()}
+			<hr>
+			{View_Smarty::forge('parts/main-adsence')}
+		{else}
+			{View_Smarty::forge('parts/main-adsence')}
+			{View_Smarty::forge('parts/no-login')}
+		{/if}
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}

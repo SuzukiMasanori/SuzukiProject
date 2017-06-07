@@ -1,0 +1,20 @@
+{View_Smarty::forge('parts/common-from-head-to-main-adsence')}
+<h2 class="h4 heading margin-bottom-20px">マイページ</h2>
+{if Auth::check()}
+	{View_Smarty::forge('parts/mypage-nav')}
+	{Form::open(['action' => '/mypage/password/modify', 'class' => 'form-horizontal panel panel-warning'])}
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>&nbsp;パスワード変更
+		</h3>
+	</div>
+	<div class="panel-body">
+		<div class="alert alert-success">パスワードを変更しました</div>
+	</div>
+	{Form::close()}
+{else}
+	{View_Smarty::forge('parts/no-login')}
+{/if}
+</main>
+</article>
+{View_Smarty::forge('parts/footer')}

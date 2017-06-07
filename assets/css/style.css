@@ -138,73 +138,83 @@ body {
 }
 
 /* line 46, ../sass/_module.scss */
-.padding-10px {
-  /*padding: 10px;*/
-}
-
-/* line 50, ../sass/_module.scss */
 .padding-top-10px {
   padding-top: 10px;
 }
 
+/* line 50, ../sass/_module.scss */
+.padding-top-20px {
+  padding-top: 20px;
+}
+
 /* line 54, ../sass/_module.scss */
+.padding-left-20px {
+  padding-left: 20px;
+}
+
+/* line 58, ../sass/_module.scss */
 .margin-bottom-20px {
   margin-bottom: 20px;
 }
 
-/* line 58, ../sass/_module.scss */
+/* line 62, ../sass/_module.scss */
 .no-float {
   float: none;
   clear: both;
 }
 
-/* line 63, ../sass/_module.scss */
+/* line 67, ../sass/_module.scss */
 .line-height2_5em {
   line-height: 2.5em;
 }
 
 /* display */
-/* line 68, ../sass/_module.scss */
+/* line 72, ../sass/_module.scss */
 .table {
   display: table;
 }
 
-/* line 72, ../sass/_module.scss */
+/* line 76, ../sass/_module.scss */
 .table-cell {
   display: table-cell;
 }
 
-/* line 76, ../sass/_module.scss */
+/* line 80, ../sass/_module.scss */
 .inline-block {
   display: inline-block;
 }
 
 /* /display */
 /* font */
-/* line 82, ../sass/_module.scss */
+/* line 86, ../sass/_module.scss */
 .text-navy {
   color: navy;
 }
 
-/* line 86, ../sass/_module.scss */
+/* line 90, ../sass/_module.scss */
+.font-size-14px {
+  font-size: 14px;
+}
+
+/* line 94, ../sass/_module.scss */
 .font-size-12px {
   font-size: 12px;
 }
 
 /* /font */
 /* list */
-/* line 93, ../sass/_module.scss */
+/* line 101, ../sass/_module.scss */
 .list-style-circlearrow li {
   position: relative;
   padding-left: 5px;
 }
-/* line 97, ../sass/_module.scss */
+/* line 105, ../sass/_module.scss */
 .list-style-circlearrow li::after, .list-style-circlearrow li::before {
   display: block;
   content: '';
   position: absolute;
 }
-/* line 102, ../sass/_module.scss */
+/* line 110, ../sass/_module.scss */
 .list-style-circlearrow li::after {
   top: .675em;
   left: -1.2em;
@@ -213,7 +223,7 @@ body {
   background-color: #3498db;
   border-radius: 100%;
 }
-/* line 110, ../sass/_module.scss */
+/* line 118, ../sass/_module.scss */
 .list-style-circlearrow li::before {
   z-index: 2;
   top: 1.05em;
@@ -272,38 +282,79 @@ body {
   background: no-repeat center url("/assets/img/menu/question_menu.png");
   background-position: center 30%;
 }
-/* line 37, ../sass/_theme.scss */
+/* line 36, ../sass/_theme.scss */
+.header li a.active, .header li:last-child a.active {
+  background-color: #eee;
+}
+/* line 39, ../sass/_theme.scss */
 .header li a.search_map:hover, .header li:last-child a.search_map:hover {
   background: #eee no-repeat center url("/assets/img/menu/japan_menu.png");
   background-position: center 30%;
 }
-/* line 41, ../sass/_theme.scss */
+/* line 43, ../sass/_theme.scss */
 .header li a.reg_map:hover, .header li:last-child a.reg_map:hover {
   background: #eee no-repeat center url("/assets/img/menu/reg_menu.png");
   background-position: center 30%;
 }
-/* line 45, ../sass/_theme.scss */
+/* line 47, ../sass/_theme.scss */
 .header li a.list_map:hover, .header li:last-child a.list_map:hover {
   background: #eee no-repeat center url("/assets/img/menu/list_menu.png");
   background-position: center 30%;
 }
-/* line 49, ../sass/_theme.scss */
+/* line 51, ../sass/_theme.scss */
 .header li a.mypage:hover, .header li:last-child a.mypage:hover {
   background: #eee no-repeat center url("/assets/img/menu/mypage_menu.png");
   background-position: center 30%;
 }
-/* line 53, ../sass/_theme.scss */
+/* line 55, ../sass/_theme.scss */
 .header li a.question:hover, .header li:last-child a.question:hover {
   background: #eee no-repeat center url("/assets/img/menu/question_menu.png");
   background-position: center 30%;
 }
 
-/* line 61, ../sass/_theme.scss */
+/* line 63, ../sass/_theme.scss */
+#map {
+  width: 100%;
+  height: 570px;
+  background: palegoldenrod;
+}
+
+/* line 69, ../sass/_theme.scss */
+#small_map {
+  width: 100%;
+  height: 250px;
+  background: palegoldenrod;
+}
+
+/* line 75, ../sass/_theme.scss */
+#result_map {
+  width: 100%;
+  height: 450px;
+  background: palegoldenrod;
+}
+
+/* line 81, ../sass/_theme.scss */
+#search_box {
+  position: relative;
+  top: -550px;
+  left: 700px;
+  background: #1dff17;
+  z-index: 50;
+}
+
+/* line 89, ../sass/_theme.scss */
+#map_search_note {
+  position: relative;
+  top: -500px;
+  left: 50px;
+}
+
+/* line 95, ../sass/_theme.scss */
 .footer {
   background: #ffffdc;
   color: #4C4C4C;
 }
-/* line 64, ../sass/_theme.scss */
+/* line 98, ../sass/_theme.scss */
 .footer .copyright {
   background: #d8fffc;
 }
