@@ -33,8 +33,8 @@
 			<nav class="table-cell">
 				<ul class="nav">
 					<li><a href="/searchmap/index" class="search_map{if Uri::string()|regex_replace:"/.*searchmap.*/":"on" eq "on"} active{/if}">マップ検索</a></li>
-					<li><a href="/registermap/index" class="reg_map{if Uri::string()|regex_replace:"/.*registermap.*/":"on" eq "on"} active{/if}">新規地点登録</a></li>
-					<li><a href="#" class="list_map">マイ地点一覧</a></li>
+					<li><a href="/registermap/index" class="reg_map{if Uri::string()|regex_replace:"/.*registermap.*/":"on" eq "on"} active{/if}">地点登録</a></li>
+					<li><a href="/listmap/index" class="list_map{if Uri::string()|regex_replace:"/.*listmap.*/":"on" eq "on"} active{/if}">マイ地点一覧</a></li>
 					<li><a href="/mypage/index" class="mypage{if Uri::string()|regex_replace:"/.*mypage.*/":"on" eq "on"} active{/if}">マイページ</a></li>
 					<li><a href="#" class="question">猫マップとは</a></li>
 				</ul>

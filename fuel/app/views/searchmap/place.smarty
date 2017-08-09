@@ -1,0 +1,349 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+		{View_Smarty::forge('parts/main-adsence')}
+		<h2 class="h4 heading margin-bottom-20px">{$register_map.place}</h2>
+		<iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDVGyFdA0VNkFp2rW8okx6Hc4LNOYvhqHo&q={$register_map.lat},{$register_map.lng}&zoom=17"
+				width="100%" height="380" frameborder=0 class="margin-bottom-20px"></iframe>
+		<table class="table">
+			<tr>
+				<th class="col-md-3"><span class="glyphicon glyphicon-map-marker text-danger" aria-hidden="true"></span>&nbsp;住所
+				</th>
+				<td>{$register_map.address}</td>
+			</tr>
+			<tr>
+				<th><span class="glyphicon glyphicon-info-sign text-info" aria-hidden="true"></span>&nbsp;概要</th>
+				<td>{$register_map.description}</td>
+			</tr>
+			<tr>
+				<th>匹数</th>
+				<td>{$register_map.num}</td>
+			</tr>
+			<tr>
+				<th>地点タイプ</th>
+				<td>{Component_Element::$map_types[$register_map.type]}</td>
+			</tr>
+			<tr>
+				<th>駐車</th>
+				<td>{Component_Element::$parkings[$register_map.parking]}</td>
+			</tr>
+			<tr>
+				<th>餌やり</th>
+				<td>{Component_Element::$feeds[$register_map.feed]}</td>
+			</tr>
+			<tr>
+				<th>なつき度</th>
+				<td>{for $i=1 to $register_map.friendly}★{/for}</td>
+			</tr>
+			<tr>
+				<th><span class="glyphicon glyphicon-picture text-info" aria-hidden="true"></span>&nbsp;サムネイル画像</th>
+				<td>{if $register_map.image}
+						<a href="#thumb" data-toggle="modal">
+							{Asset::img("registermap/{$register_map.image}", ["class" => "no-padding", 'width' => '300'])}
+						</a>
+					{else}
+						画像なし
+					{/if}</td>
+			</tr>
+			<tr>
+				<th><span class="glyphicon glyphicon-user text-info" aria-hidden="true"></span>&nbsp;登録者</th>
+				<td>{$register_map.username}</td>
+			</tr>
+			<tr>
+				<th><span class="glyphicon glyphicon-calendar text-info" aria-hidden="true"></span>&nbsp;登録日</th>
+				<td>{$register_map.created_at|date_format:'%Y年%m月%d日 %H時'}</td>
+			</tr>
+			{if Auth::check()}
+				<tr>
+					<td colspan="2" class="text-right">
+						{if ! $is_my_point}
+							<button type="button" class="btn btn-warning" id="register_my_point">マイ地点登録をする</button>
+						{/if}
+						{if $is_modify}
+							<a href="/registermap/input/edit?register_map_id={Input::get('register_map_id')|escape}"
+							   class="btn btn-primary">編集する</a>
+						{/if}
+						<br>
+					</td>
+				</tr>
+			{/if}
+		</table>
+		<h3 class="h4"><span class="glyphicon glyphicon-pencil text-success" aria-hidden="true"></span>&nbsp;投稿</h3>
+		<table class="table">
+			<tbody id="post_area">
+			{foreach from=$comments key=key item=comment}
+				<tr>
+					{if $comment.image}
+						<td class="col-xs-4"><a href="#comment_thumb{$key}"
+												data-toggle="modal">{Asset::img("comment/{$comment.image}", ["class" => "no-padding img-responsive"])}</a>
+						</td>
+					{/if}
+					<td class="col-xs-{if $comment.image}8{else}12{/if}"{if !$comment.image} colspan="2"{/if}
+						style="position: relative; padding-bottom: 50px">
+						{$comment.comment|nl2br}
+						<p class="text-right position-absolute bottom-right">
+							<span class="glyphicon glyphicon-user text-info"
+								  aria-hidden="true"></span> {$comment.username}
+							<span class="glyphicon glyphicon-calendar text-warning"
+								  aria-hidden="true"></span>&nbsp;{$comment.created_at|date_format:'%Y年%m月%d日 %H時'}
+							{if $comment.users_id == $register_map.users_id}
+								<button class="btn btn-warning delete_comment" data-comment-id="{$comment.comment_id}">
+									コメントを削除する
+								</button>
+							{/if}
+						</p>
+					</td>
+				</tr>
+				{foreachelse}
+				<tr>
+					<td colspan="2">投稿はまだありません</td>
+				</tr>
+			{/foreach}
+			</tbody>
+		</table>
+		{if Auth::check()}
+			<form class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">投稿する</h3>
+				</div>
+				<div class="panel-body" id="post_panel_body">
+					<div class="form-group">
+						{Form::textarea('comment', '', ['class' => 'form-control', 'rows' => 6, 'cols' => 8, 'id' => 'comment', 'placeholder' => '最大1,000文字まで'])}
+					</div>
+					<div class="form-group">
+						<div class="border-dashed panel-primary file-up-area text-center table" id="img_area">
+							<p class="text-muted table-cell text-middle">
+								画像をドロップしてアップロード<br>
+								または<br>
+								<span class="file-button">画像を選択<input type="file" name="image" id="file_image"
+																	  accept="image/*"></span><br>
+								（1メガまで）
+							</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-primary" id="posted_btn">投稿する</button>
+					</div>
+				</div>
+			</form>
+		{/if}
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}
+{if $register_map.image}
+	<div class="modal fade" id="thumb">
+		<div class="modal-dialog">
+			<div class="modal-content modal-lg">
+				<div class="modal-body">
+					<button class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">閉じる</span>
+					</button>
+					{Asset::img("registermap/{$register_map.image}", ["class" => "no-padding img-responsive"])}
+				</div>
+			</div>
+		</div>
+	</div>
+{/if}
+{foreach from=$comments key=key item=comment}
+	{if $comment.image}
+		<div class="modal fade" id="comment_thumb{$key}">
+			<div class="modal-dialog">
+				<div class="modal-content modal-lg">
+					<div class="modal-body">
+						<button class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">閉じる</span>
+						</button>
+						{Asset::img("comment/{$comment.image}", ["class" => "no-padding img-responsive"])}
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+{/foreach}
+<script type="text/javascript">
+	$(function () {
+		{if Auth::check()}
+		var file = null;
+		var max_comment_id = {if $comments[$comments|@count - 1].comment_id}{$comments[$comments|@count - 1].comment_id}{else}0{/if};
+
+		$('#posted_btn').on('click', function (e) {
+			var commentData = new FormData();
+			commentData.append('register_map_id',{Input::get('register_map_id')|escape});
+			commentData.append('comment', $('#comment').val());
+			commentData.append('image', file);
+			commentData.append('max_comment_id', max_comment_id);
+
+			$.ajax({
+				url: '{Uri::create('/searchmap/rest/comment.json')}',
+				type: 'POST',
+				data: commentData,
+				processData: false,
+				contentType: false,
+			}).done(function (data, status, xhr) {
+				$('.post_error').remove();
+				if (data.error) {
+					var errors = '';
+					for (var i in data.error) errors += data.error[i] + '<br>'
+					$('#post_panel_body').prepend('<div class="alert alert-danger post_error">' + errors + '</div>');
+				} else {
+					{* 投稿欄の追加処理 *}
+					var firstTr = $('#post_area').children('tr').first();
+					if (/投稿はまだありません/.test(firstTr.text())) firstTr.remove();
+					for (var i in data.comment) {
+						var html = '<tr>';
+						if (data.comment[i].image != null) {
+							html += '<td class="col-xs-4" style="adding-top: 1000px">' +
+								'<a href="#comment_thumb' + data.comment[i].comment_id + '" data-toggle="modal">' +
+								'<img src="/assets/img/comment/' + data.comment[i].image + '" class="no-padding img-responsive">' +
+								'</a>' +
+								'</td>';
+						}
+						var date = new Date(data.comment[i].created_at * 1000);
+						var commentDate = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日 ' + date.getHours() + '時';
+						html += '<td style="position: relative;padding-top: 1000px;padding-bottom: 50px" class="col-xs-' + (data.comment[i].image != null ? '8"' : '12" colspan="2"') + '>' +
+							data.comment[i].comment.replace(/\r\n/g, '<br />').replace(/(\n|\r)/g, '<br />') +
+							'<p class="text-right position-absolute bottom-right">' +
+							'<span class="glyphicon glyphicon-user text-info" aria-hidden="true"></span> ' + data.comment[i].username +
+							' <span class="glyphicon glyphicon-calendar text-warning" aria-hidden="true"></span> ' + commentDate +
+							(data.comment[i].users_id == {$register_map.users_id} ? ' <button class="btn btn-warning delete_comment" data-comment-id="' + data.comment[i].comment_id + '">コメントを削除する</button>' : '') +
+							'</p>' +
+							'</td>' +
+							'</tr>';
+						var newComent = $(html);
+						newComent.appendTo('#post_area');
+						newComent.children('td').animate({
+							paddingTop: "15px"
+						}, 2000);
+
+						$('#wrap').after(
+							'<div class="modal fade" id="comment_thumb' + data.comment[i].comment_id + '">' +
+							'<div class="modal-dialog">' +
+							'<div class="modal-content modal-lg">' +
+							'<div class="modal-body">' +
+							'<button class="close" data-dismiss="modal">' +
+							'<span aria-hidden="true">&times;</span><span class="sr-only">閉じる</span>' +
+							'</button>' +
+							'<img src="/assets/img/comment/' + data.comment[i].image + '" class="no-padding img-responsive">' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</div>'
+						);
+					}
+					$('#comment').val('');
+					$('#img_area').html('' +
+						'<p class="text-muted table-cell text-middle">' +
+						'画像をドロップしてアップロード <br>' +
+						'または <br>' +
+						'<span class="file-button">画像を選択<input type="file" name="image" id="file_image" accept="image/*"></span><br>' +
+						'（1メガまで）</p>'
+					);
+					file = null;
+					max_comment_id = data.comment[data.comment.length - 1].comment_id;
+				}
+			}).fail(function (xhr, status, error) {
+				console.log(error);
+				alert('投稿できませんでした、時間をおいて再度投稿してください');
+			});
+		});
+
+		{* ファイルのドラッグアンドドロップ表示 *}
+		$('#file_image').on('change', function (e) {
+			var file = e.target.files;
+			var reader = new FileReader();
+			reader.readAsDataURL(file[0]);
+			reader.onload = function () {
+				$('#img_area').empty();
+				$('<img class="img-responsive">').appendTo('#img_area').attr('src', reader.result);
+			}
+		});
+		$('#img_area').on('dragover', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+			e.originalEvent.dataTransfer.dropEffect = 'copy';
+		});
+		$('#img_area').on('drop', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+			var files = e.originalEvent.dataTransfer.files;
+			file = files[0];
+			var reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = function () {
+				$('#img_area').empty();
+				$('<img class="img-responsive">').appendTo('#img_area').attr('src', reader.result);
+			}
+		});
+		{*
+		var img_area = document.getElementById('img_area');
+		img_area.addEventListener('dragover', function (e) {
+			e.stopPropagation();//
+			e.preventDefault();
+			e.dataTransfer.dropEffect = 'copy';
+		}, false);
+		img_area.addEventListener('drop', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+			var files = e.dataTransfer.files;
+			var file = files[0];
+			var reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = function () {
+				$('#img_area').empty();
+				$('<img class="img-responsive">').appendTo('#img_area').attr('src', reader.result);
+			}
+		}, false);
+		*}
+
+		{* コメントの削除 *}
+		$('#post_area').on('click', '.delete_comment', function (e) {
+			//alert($(this).data('comment-id'));
+			var that = $(this);
+			var commentData = new FormData();
+			commentData.append('comment_id', that.data('comment-id'));
+			$.ajax({
+				url: '{Uri::create('/searchmap/rest/delete_comment.json')}',
+				type: 'POST',
+				data: commentData,
+				processData: false,
+				contentType: false
+			}).done(function (data, status, xhr) {
+				that.closest('tr').remove();
+				if (!$('#post_area tr').get(0)) {
+					$('#post_area').html('<tr><td colspan="2">投稿はまだありません</td></tr>')
+				}
+			}).fail(function (xhr, status, error) {
+				console.log(error);
+				alert('削除できませんでした、時間をおいて再度実行してください');
+			});
+		});
+
+		{* マイ地点登録 *}
+		$('#register_my_point').on('click', function (e) {
+			var that = $(this);
+			var myPointData = new FormData();
+			myPointData.append('register_map_id', {Input::get('register_map_id')|escape});
+			$.ajax({
+				url: '{Uri::create('/searchmap/rest/register_my_point.json')}',
+				type: 'POST',
+				data: myPointData,
+				processData: false,
+				contentType: false
+			}).done(function (data, status, xhr) {
+				that.remove();
+			}).fail(function (xhr, status, error) {
+				console.log(error);
+				alert('マイ地点登録できませんでした、時間をおいて再度実行してください');
+			});
+		});
+		{/if}
+	});
+</script>
+{*
+　どうする
+　マイ地点登録後の表示、今は非表示だが、マイ地点登録を削除するの表示もあり。
+*}

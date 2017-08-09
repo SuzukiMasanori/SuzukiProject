@@ -6,7 +6,7 @@
 	<script type="text/javascript">
 		google.maps.event.addDomListener(window, "load", function () {
 
-			// 初期地図表示
+			{* 初期地図表示 *}
 			var map = document.getElementById('map');
 			var mapCanvas = new google.maps.Map(map, {
 				zoom: 10,
@@ -24,19 +24,28 @@
 				mapCanvas.setCenter(latlng);
 			}
 
-			// 地図をクリックしたら座標をGETパラメータを持って遷移
+			{* 地図をクリックしたら座標をGETパラメータを持って遷移 *}
 			google.maps.event.addListener(mapCanvas, 'click', function (event) {
-				//alert(event.latLng);
-				/*new google.maps.InfoWindow({
+				{* new google.maps.InfoWindow({
 					position: event.latLng,
 					content: event.latLng.toString()
-				}).open(mapCanvas);*/
+				}).open(mapCanvas); *}
 				location.href = '/registermap/input/?lat=' + event.latLng.lat() + '&lng=' + event.latLng.lng();
 			});
 
-			// 地名検索移動
-			var geocoder = new google.maps.Geocoder();
+			{* 地名検索移動 *}
+			{View_Smarty::forge('parts/area-search-js')}
+			areaSearch(false);
+			{* $("#place_name").keypress(function (event) {
+				if (event.which == 13) {
+					areaMove();
+				}
+			});
 			$('#move_map_btn').click(function () {
+				areaMove();
+			});
+			var geocoder = new google.maps.Geocoder();
+			var areaMove = function () {
 				geocoder.geocode(
 							{literal}{
 						address: $('#place_name').val(),
@@ -53,7 +62,7 @@
 						}
 					}
 				);
-			});
+			} *}
 		});
 	</script>
 	<main class="col-xs-12 no-padding table-cell">
@@ -64,7 +73,7 @@
 			</div>
 			<div class="col-xs-4 text-right">
 				<div class="input-group">
-					<input type="text" class="form-control" placeholder="移動したい地名を入力" id="place_name">
+					<input type="text" class="form-control" placeholder="移動したい地名を入力" id="address">
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default" id="move_map_btn">移動</button>
 					</span>

@@ -1,35 +1,155 @@
 {View_Smarty::forge('parts/head')}
 {View_Smarty::forge('parts/header')}
+<!--suppress ALL -->
 <article class="table">
 	<aside class="col-xs-3 aside table-cell">
+		<div class="panel panel-info">
+			<div class="panel-heading"><h2 class="panel-title">地名入力検索</h2></div>
+			<div class="panel-body">
+				<div class="form-group">
+					{Form::input('text', '', ['class' => 'form-control', 'placeholder' => '検索したい地名を入力', 'id' => 'address'])}
+				</div>
+				<div class="form-group">
+					<button class="btn btn-info col-xs-12 no-float" id="move_map_btn">検索</button>
+				</div>
+			</div>
+		</div>
 		{View_Smarty::forge('parts/side-adsence')}
 	</aside>
 	{View_Smarty::forge('parts/google-map-include')}
 	<script type="text/javascript">
 		google.maps.event.addDomListener(window, "load", function () {
 
-			// 初期地図表示
+			{* 地図表示 *}
 			var map = document.getElementById('map');
 			var mapCanvas = new google.maps.Map(map, {
 				zoom: 9,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
-			//var bounds;
+
+			{* ピンを立てる *}
+			var markers = new google.maps.MVCArray();
+			var infoWindows = new google.maps.MVCArray();
+			var pageContetsNum = 5;{* 表に表示される1ページあたりの地点数 *}
+			var setPin = function () {
+				markers.forEach(function (marker, idx) {
+					marker.setMap(null);
+				});
+				var bds = mapCanvas.getBounds();
+				var bounds = {
+					b_b: bds.b.b,
+					b_f: bds.b.f,
+					f_b: bds.f.b,
+					f_f: bds.f.f
+				};
+
+				$.ajax({
+					url: '{Uri::create('/searchmap/rest/latlng.json')}',
+					type: 'POST',
+					data: bounds
+				}).done(function (data, status, xhr) {
+
+					{* 通信成功時の処理 *}
+					$('#place_table').empty();
+					var marker;
+					{* console.log(data); *}
+					var html;
+					var listContents = [];
+					if (data !== undefined) {
+						html = '<ul class="list-group" id="point_list">';
+						for (var i in data) {
+							marker = new google.maps.Marker({
+								map: mapCanvas,
+								position: new google.maps.LatLng(data[i]['lat'], data[i]['lng'])
+							});
+							var content = '' +
+								'<h3 class="h4">' + data[i]['place'] + '</h3>' +
+								'<p>' + data[i]['address'] + '</p>';
+							if (data[i]['image'] != null) {
+								content += '<img width="160" height="120" src="/assets/img/registermap/' + data[i]['image'] + '">';
+							}
+							content += '<p><a href="/searchmap/result/place?register_map_id=' + data[i]['register_map_id'] + '">＞詳細を見る、または書き込む</a></p>'
+							createInfoWindow(marker, content);
+							markers.push(marker);
+							listContents.push('<li class="list-group-item table break-word">' +
+								'<div class="col-xs-3 no-float table-cell"><img class="" width="180" src="/assets/img/' +
+								(data[i]['image'] == null ? 'user/no-image.png' : 'registermap/' + data[i]['image']) + '"></div>' +
+								'<div class="col-xs-9 no-float table-cell break-word text-top">' +
+								'<h4><a href="/searchmap/result/place?register_map_id=' + data[i]['register_map_id'] + '">' + data[i]['place'] + '</a></h4>' +
+								'<p class="text-muted font-size-12px"><span class="glyphicon glyphicon-map-marker text-danger" aria-hidden="true"></span>&nbsp;' + data[i]['address'] + '</p>' +
+								'<p><span class="glyphicon glyphicon-info-sign text-info" aria-hidden="true"></span>&nbsp;' + data[i]['description'] + '</p>' +
+								'<p><span class="glyphicon glyphicon-user text-info" aria-hidden="true"></span>&nbsp;' + data[i]['username'] + '</p>' +
+								'<p><span class="glyphicon glyphicon-calendar text-warning" aria-hidden="true"></span>&nbsp;' + '登録日：' + data[i]['created_at'] + '</p>' +
+								'<p class="text-right"><a href="/searchmap/result/place?register_map_id=' + data[i]['register_map_id'] + '">＞詳細を見る、または投稿する</a></p>' +
+								'</div>' +
+								'</li>');
+						}
+						html += '</ul>';
+					} else {
+						html = '';
+					}
+
+					{* ページャー *}
+					if (pageContetsNum < listContents.length) {
+						html += '<nav class="text-center"><ul class="pagination"><li class="map_pager_move map_pager_prev">' +
+							'<a href="javascript:void(0)" aria-label="前のページへ"><span aria-hidden="true" >«</span></a></li>';
+						var maxPageNum = parseInt(listContents.length / pageContetsNum);
+						0 < listContents.length % pageContetsNum && maxPageNum++;
+						for (var i = 1; i <= maxPageNum; i++) {
+							html += '<li class="map_pager' + (i == 1 ? ' active' : '') + '"><a href="javascript:void(0)">' + i + '</a></li>';
+						}
+						html += '<li class="map_pager_move map_pager_next"><a href="javascript:void(0)" aria-label="次のページへ">' +
+							'<span aria-hidden="true">»</span></a></li></ul></nav>';
+					}
+
+					$('#place_table').html(html);
+					displayPointList(listContents, 0);
+					$('.map_pager').on('click', function () {
+						$('.map_pager').removeClass('active');
+						$(this).addClass('active');
+						displayPointList(listContents, parseInt($(this).children('a').text()) - 1);
+					});
+					$('.map_pager_move').on('click', function () {
+						var currentPage = parseInt($('.map_pager.active').children('a').text());
+						var movePage = currentPage;
+						if ($(this).hasClass('map_pager_prev')) movePage = currentPage - 2;
+						if ($(this).hasClass('map_pager_prev') && currentPage != 1 ||
+							$(this).hasClass('map_pager_next') && currentPage != maxPageNum) {
+							$('.map_pager').removeClass('active');
+							$('.map_pager').eq(movePage).addClass('active');
+							displayPointList(listContents, movePage);
+						}
+					});
+
+				}).fail(function (xhr, status, error) {
+					console.log(error);
+				});
+			}
+
+			{* ピンをクリックしたときに表示される小窓 *}
+			var createInfoWindow = function (marker, content) {
+				marker.addListener('click', function () {
+					infoWindows.forEach(function (infoWindow, idx) {
+						infoWindow.close();
+					});
+					var infoWindow = new google.maps.InfoWindow({
+						content: content // 吹き出しに表示する内容
+					});
+					infoWindow.open(mapCanvas, marker);
+					infoWindows.push(infoWindow);
+				});
+			}
+
+			{* 地図の初期表示 *}
 			var geocoder = new google.maps.Geocoder();
 			geocoder.geocode(
 						{literal}{
-					address:{/literal}'{if Input::post('address')}{Input::post('address')|escape}{else}{Input::get('pref')|escape}{/if}'{literal} ,
+					address: {/literal}'{if Input::post('address')}{Input::post('address')|escape}{else}{Input::get('pref')|escape}{/if}'{literal} ,
 					region: 'jp'
 				}{/literal},
 				function (results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 						var result = results[0];
-						var bounds = {
-							b_b: result.geometry.bounds.b.b,
-							b_f: result.geometry.bounds.b.f,
-							f_b: result.geometry.bounds.f.b,
-							f_f: result.geometry.bounds.f.f
-						};
 						{if Input::post('address')}
 						if ("viewport" in result.geometry) {
 							mapCanvas.fitBounds(result.geometry.viewport);
@@ -39,44 +159,38 @@
 						{else}
 						mapCanvas.panTo(result.geometry.location);
 						{/if}
-
-						$.ajax({
-							url: '{Uri::create('/searchmap/rest/latlng.json')}',
-							type: 'POST',
-							data: bounds
-						}).done(function (data, status, xhr) {
-							// 通信成功時の処理
-							for (var i in data) {
-								new google.maps.Marker({
-									map: mapCanvas,
-									position: new google.maps.LatLng(data[i]['lat'], data[i]['lng'])
-								});
-							}
-						}).fail(function (xhr, status, error) {
-							console.log(error);
-						});
+						setPin();
 					}
 				}
 			);
-			// 地図のズームアウトや移動の処理、ajaxも共通化///////////////////////////////////////////////////////////////ここからピンけしも必要
 
+			{* 一覧表示 *}
+			var displayPointList = function (listContents, page) {
+				var contentsNum = pageContetsNum;
+				if (Math.ceil(listContents.length / pageContetsNum) == page) {
+					contentsNum = listContents.length % pageContetsNum;
+					if (contentsNum == 0) contentsNum = pageContetsNum;
+				}
+				$('#point_list').empty();
+				for (var i = 0; i < contentsNum; i++) {
+					$('#point_list').append(listContents[i + page * pageContetsNum]);
+				}
+			}
 
-			// 地図をクリックしたら座標をGETパラメータを持って遷移
-//			google.maps.event.addListener(mapCanvas, 'click', function (event) {
-//				//alert(event.latLng);
-//				/*new google.maps.InfoWindow({
-//				 position: event.latLng,
-//				 content: event.latLng.toString()
-//				 }).open(mapCanvas);*/
-//				location.href = '/registermap/input/?lat=' + event.latLng.lat() + '&lng=' + event.latLng.lng();
-//			});
+			{* 地図の縮尺変更、移動時のピンの再設定 *}
+			google.maps.event.addListener(mapCanvas, 'zoom_changed', setPin);
+			google.maps.event.addListener(mapCanvas, 'dragend', setPin);
 
+			{* 地名検索移動 *}
+			{View_Smarty::forge('parts/area-search-js')}
+			areaSearch(true);
 		});
 	</script>
 	<main class="col-xs-9 no-padding padding-top-10px table-cell">
 		<h2 class="h4 heading margin-bottom-20px">マップ検索</h2>
-		<div id="map"></div>
-		選択した県や入力した場所での一覧表示
+		<div id="map" class="margin-bottom-20px"></div>
+		<div id="place_table"></div>
 	</main>
 </article>
 {View_Smarty::forge('parts/footer')}
+</main>

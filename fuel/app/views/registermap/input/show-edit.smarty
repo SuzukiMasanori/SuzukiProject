@@ -6,14 +6,15 @@
 	</aside>
 	<main class="col-xs-9 no-padding padding-top-10px table-cell">
 
-		<h2 class="h4 heading margin-bottom-20px">新規地点登録</h2>
+		<h2 class="h4 heading margin-bottom-20px">登録地点更新</h2>
 		{if Auth::check()}
 			{View_Smarty::forge('parts/google-map-include')}
 			<script type="text/javascript">
 				google.maps.event.addDomListener(window, "load", function () {
 
 					var map = document.getElementById('small_map');
-					var latLng = new google.maps.LatLng({if Input::get('lat')}{Input::get('lat')}{else}{Session::get('lat')}{/if},{if Input::get('lng')}{Input::get('lng')}{else}{Session::get('lng')}{/if});
+					{* var latLng = new google.maps.LatLng({if Input::get('lat')}{Input::get('lat')}{else}{Session::get('lat')}{/if},{if Input::get('lng')}{Input::get('lng')}{else}{Session::get('lng')}{/if}); *}
+					var latLng = new google.maps.LatLng({$registermap->lat}, {$registermap->lng});
 					var mapCanvas = new google.maps.Map(map, {
 						zoom: 18,
 						mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -35,8 +36,13 @@
 				});
 			</script>
 			<div id="small_map"></div>
-			{Form::open(['action' => '/registermap/input/confirm', 'class' => 'form-horizontal padding-top-20px', 'enctype'=>'multipart/form-data'])}
+			{Form::open(['action' => '/registermap/input/confirm_edit', 'class' => 'form-horizontal padding-top-20px', 'enctype'=>'multipart/form-data'])}
 			{Form::csrf()}
+			{if Input::post('register_map_id')}
+				{Form::hidden('register_map_id', Input::post('register_map_id'))}
+			{else}
+				{Form::hidden('register_map_id', $registermap->register_map_id)}
+			{/if}
 			<div class="form-group">
 				{Form::label('地名', 'address', ['class' => 'control-label col-sm-3'])}
 				<div class="col-sm-9">
@@ -46,7 +52,7 @@
 					{if Input::post('address')}
 						{Form::input('address', Input::post('address'), ['class' => 'form-control'])}
 					{else}
-						{Form::input('address', $geo_address, ['class' => 'form-control'])}
+						{Form::input('address', $registermap->address, ['class' => 'form-control'])}
 					{/if}
 				</div>
 				<p class="help-block col-sm-offset-3 col-sm-9"><span class="label label-danger">必須</span>　詳細な地名をご希望により追記してください。最大50文字まで
@@ -58,7 +64,11 @@
 					{if $place}
 						<div class="alert alert-danger">{$place}</div>
 					{/if}
-					{Form::input('place', Input::post('place'), ['class' => 'form-control'])}
+					{if Input::post('place')}
+						{Form::input('place', Input::post('place'), ['class' => 'form-control'])}
+					{else}
+						{Form::input('place', $registermap->place, ['class' => 'form-control'])}
+					{/if}
 				</div>
 				<p class="help-block col-sm-offset-3 col-sm-9"><span class="label label-danger">必須</span>　例：ねこの楽園島、田代島。最大50文字まで
 				</p>
@@ -69,7 +79,11 @@
 					{if $description}
 						<div class="alert alert-danger">{$description}</div>
 					{/if}
-					{Form::textarea('description', Input::post('description'), ['class' => 'form-control', 'rows' => 6, 'cols' => 8])}
+					{if Input::post('description')}
+						{Form::textarea('description', Input::post('description'), ['class' => 'form-control', 'rows' => 6, 'cols' => 8])}
+					{else}
+						{Form::textarea('description', $registermap->description, ['class' => 'form-control', 'rows' => 6, 'cols' => 8])}
+					{/if}
 				</div>
 				<p class="help-block col-sm-offset-3 col-sm-9">最大1,000文字まで</p>
 			</div>
@@ -79,9 +93,13 @@
 					{if $num}
 						<div class="alert alert-danger">{$num}</div>
 					{/if}
-					{Form::select('num', Input::post('num'), $numbers, ['class' => 'form-control'])}
+					{if Input::post('num')}
+						{Form::select('num', Input::post('num'), $numbers, ['class' => 'form-control'])}
+					{else}
+						{Form::select('num', $registermap->num, $numbers, ['class' => 'form-control'])}
+					{/if}
 				</div>
-				<p class="help-block col-sm-offset-3 col-sm-9">おおよそで構いません上限数値については考える必要あり</p>
+				<p class="help-block col-sm-offset-3 col-sm-9">おおよそで構いません</p>
 			</div>
 			<div class="form-group">
 				{Form::label('地点タイプ', 'type', ['class' => 'control-label col-sm-3'])}
@@ -89,7 +107,11 @@
 					{if $type}
 						<div class="alert alert-danger">{$type}</div>
 					{/if}
-					{Form::select('type', Input::post('type'), $types, ['class' => 'form-control'])}
+					{if Input::post('type')}
+						{Form::select('type', Input::post('type'), $types, ['class' => 'form-control'])}
+					{else}
+						{Form::select('type', $registermap->type, $types, ['class' => 'form-control'])}
+					{/if}
 				</div>
 			</div>
 			<div class="form-group">
@@ -98,7 +120,11 @@
 					{if $parking}
 						<div class="alert alert-danger">{$parking}</div>
 					{/if}
-					{Form::select('parking', Input::post('parking'), $parkings, ['class' => 'form-control'])}
+					{if Input::post('parking')}
+						{Form::select('parking', Input::post('parking'), $parkings, ['class' => 'form-control'])}
+					{else}
+						{Form::select('parking', $registermap->parking, $parkings, ['class' => 'form-control'])}
+					{/if}
 				</div>
 			</div>
 			<div class="form-group">
@@ -107,11 +133,15 @@
 					{if $feed}
 						<div class="alert alert-danger">{$feed}</div>
 					{/if}
-					<label class="radio-inline">{Form::radio('feed', 1, Input::post('feed') == 1)}可</label>
-					<label class="radio-inline">{Form::radio('feed', 2, Input::post('feed') == 2)}不可</label>
+					<label class="radio-inline">{Form::radio('feed', 1, Input::post('feed') == 1 or $registermap->feed == 1)}
+						可</label>
+					<label class="radio-inline">{Form::radio('feed', 2, Input::post('feed') == 2 or $registermap->feed == 2)}
+						不可</label>
 					<label class="radio-inline">
 						{if Input::post('feed')}
 							{Form::radio('feed', 3, Input::post('feed') == 3)}
+						{elseif $registermap->feed}
+							{Form::radio('feed', 3, $registermap->feed == 3)}
 						{else}
 							{Form::radio('feed', 3, true)}
 						{/if}
@@ -126,16 +156,38 @@
 						<div class="alert alert-danger">{$friendly}</div>
 					{/if}
 					<input type="range" name="friendly" min="0" max="5" step="1"
-						   value="{if Input::post('friendly')}{Input::post('friendly')}{else}0{/if}">
-					<span id="friendly_star">{if Input::post('friendly')}{section name=i start=0 loop=Input::post('friendly')}★{/section}{/if}</span>
+						   value="{if Input::post('friendly')}{Input::post('friendly')}{elseif $registermap->friendly}{$registermap->friendly}{else}0{/if}">
+					<span id="friendly_star">
+                        {if Input::post('friendly')}
+							{section name=i start=0 loop=Input::post('friendly')}★{/section}
+						{elseif $registermap->friendly}
+							{section name=i start=0 loop=$registermap->friendly}★{/section}
+						{/if}
+					</span>
 				</div>
 			</div>
 			<div class="form-group">
 				{Form::label('サムネイル画像', 'image', ['class' => 'control-label col-sm-3'])}
 				<div class="col-sm-9">
+					{if $registermap->image}
+						{Asset::img("registermap/{$registermap->image}", ["class" => "no-padding", 'width' => '300'])}
+					{elseif $user_image}
+						{Asset::img("registermap/{$user_image}", ["class" => "no-padding", 'width' => '300'])}
+					{else}
+						画像なし
+					{/if}
+					{if $registermap->image || $user_image}
+						<br>
+						{Form::label('画像を削除する', 'delete_image')}
+						{if Input::post('delete_image')}
+							{Form::checkbox('delete_image', 'on', true)}
+						{else}
+							{Form::checkbox('delete_image', 'on')}
+						{/if}
+					{/if}
 					{if $image}
 						<div class="alert alert-danger">{$image}</div>
-					{/if}
+					{/if}{* 余裕があればドラッグアンドドロップにする *}
 					{Form::file('image')}
 				</div>
 				<p class="help-block col-sm-offset-3 col-sm-9">1MB以下の画像</p>

@@ -1,0 +1,32 @@
+var areaSearch = function (isSetPin) {
+$("#address").keypress(function (event) {
+if (event.which == 13) {
+areaMove();
+}
+});
+$('#move_map_btn').click(function () {
+areaMove();
+});
+var geocoder = new google.maps.Geocoder();
+var areaMove = function () {
+geocoder.geocode(
+{literal}{
+	address: $('#address').val(),
+	region: 'jp'
+	}{/literal},
+function (results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+var result = results[0];
+if ("viewport" in result.geometry) {
+mapCanvas.fitBounds(result.geometry.viewport);
+} else if ("bounds" in result.geometry) {
+mapCanvas.fitBounds(result.geometry.bounds);
+}
+}
+}
+);
+//console.log(mapCanvas.getCenter());
+}
+
+isSetPin && setPin();
+}

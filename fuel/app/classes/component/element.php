@@ -35,4 +35,11 @@ class Component_Element
 		'路駐可',
 		'不明',
 	);
+
+	public static $feeds = array(
+		'',
+		'可',
+		'不可',
+		'不明',
+	);
 }
