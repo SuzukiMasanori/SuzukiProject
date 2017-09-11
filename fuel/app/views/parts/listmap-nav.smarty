@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs" style="margin-bottom: 10px">
+	<li{if Uri::string()|regex_replace:"/.*index.*/":"on" eq "on"} class="active"{/if}><a href="/listmap/index">マイ地点</a>
+	</li>
+	<li{if Uri::string()|regex_replace:"/.*register.*/":"on" eq "on"} class="active"{/if}><a href="/listmap/register">登録地点</a>
+	</li>
+</ul>

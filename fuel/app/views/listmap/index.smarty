@@ -1,0 +1,104 @@
+{View_Smarty::forge('parts/head')}
+{View_Smarty::forge('parts/header')}
+<article class="table">
+	<aside class="col-xs-3 aside table-cell">
+		{View_Smarty::forge('parts/side-adsence')}
+	</aside>
+	<main class="col-xs-9 no-padding padding-top-10px table-cell">
+		{View_Smarty::forge('parts/main-adsence')}
+		<h2 class="h4 heading margin-bottom-20px">マイ地点</h2>
+		{if Auth::check()}
+			{View_Smarty::forge('parts/listmap-nav')}
+				<div id="place_table">
+				<ul class="list-group" id="point_list">
+					<!--{foreach from=$map_list key=m_l_key item=map}
+						<li class="list-group-item table break-word">
+							<div class="col-xs-3 no-float table-cell">
+								{if $map.image}
+									{Asset::img("registermap/{$map.image}", ['alt' => $map.place, 'width' => 180])}
+								{else}
+									{Asset::img('user/no-image.png', ["alt" => "NoImage", 'width' => 180])}
+								{/if}
+							</div>
+							<div class="col-xs-9 no-float table-cell break-word text-top">
+								<h4>
+									<a href="/searchmap/result/place?register_map_id={$map.register_map_id}">{$map.place}</a>
+								</h4>
+								<p class="text-muted font-size-12px">
+									<span class="glyphicon glyphicon-map-marker text-danger" aria-hidden="true"></span>
+									&nbsp;{$map.address}
+								</p>
+								<p><span class="glyphicon glyphicon-info-sign text-info" aria-hidden="true"></span>
+									&nbsp;{$map.description}
+								</p>
+								<p><span class="glyphicon glyphicon-user text-info" aria-hidden="true"></span>&nbsp;{$map.username}
+								</p>
+								<p>
+									<span class="glyphicon glyphicon-calendar text-warning" aria-hidden="true"></span>
+									&nbsp;{$map.created_at|date_format:'%Y年%m月%d日 %H時'}</p>
+								<p class="text-right">
+									<a href="/searchmap/result/place?register_map_id={$map.register_map_id}">＞詳細を見る、または投稿する</a>
+								</p></div>
+						</li>
+						{foreachelse}
+						<li>マイ地点登録はされていません</li>
+					{/foreach}-->
+					{section name=key max=2 start=$start loop=$map_list_2}{* 実装が終わったらmaxを10にする *}
+						<li class="list-group-item table break-word">
+							<div class="col-xs-3 no-float table-cell">
+								{if $map_list_2[key].image}
+									{Asset::img("registermap/{$map_list_2[key].image}", ['alt' => $map_list_2[key].place, 'width' => 180])}
+								{else}
+									{Asset::img('user/no-image.png', ["alt" => "NoImage", 'width' => 180])}
+								{/if}
+							</div>
+							<div class="col-xs-9 no-float table-cell break-word text-top">
+								<h4>
+									<a href="/searchmap/result/place?register_map_id={$map_list_2[key].register_map_id}">{$map_list_2[key].place}</a>
+								</h4>
+								<p class="text-muted font-size-12px">
+									<span class="glyphicon glyphicon-map-marker text-danger" aria-hidden="true"></span>
+									&nbsp;{$map_list_2[key].address}
+								</p>
+								<p><span class="glyphicon glyphicon-info-sign text-info" aria-hidden="true"></span>
+									&nbsp;{$map_list_2[key].description}
+								</p>
+								<p><span class="glyphicon glyphicon-user text-info"
+										 aria-hidden="true"></span>&nbsp;{$map_list_2[key].username}
+								</p>
+								<p>
+									<span class="glyphicon glyphicon-calendar text-warning" aria-hidden="true"></span>
+									&nbsp;{$map_list_2[key].created_at|date_format:'%Y年%m月%d日 %H時'}</p>
+								<p class="text-right">
+									<a href="/searchmap/result/place?register_map_id={$map_list_2[key].register_map_id}">＞詳細を見る、または投稿する</a>
+								</p></div>
+						</li>
+					{sectionelse}
+						<li>マイ地点登録はされていません</li>
+					{/section}
+				</ul>
+				ページングを考える/////////////////////////////
+					{if 1 < $pages}
+				<nav class="text-center">
+					<ul class="pagination">
+						<li class="map_pager_move map_pager_prev"><a href="/listmap/index/?current={if 1 < $current}{$current - 1}{else}1{/if}" aria-label="前のページへ"><span
+										aria-hidden="true">«</span></a></li>
+						{section name=key loop=$pages}
+							{if $current eq $smarty.section.key.index + 1}
+								<li class="map_pager active"><a>{$smarty.section.key.index + 1}</a></li>
+								{else}
+								<li class="map_pager"><a href="/listmap/index/?current={$smarty.section.key.index + 1}">{$smarty.section.key.index + 1}</a></li>
+							{/if}
+						{/section}
+						<li class="map_pager_move map_pager_next"><a href="/listmap/index/?current={if $current ne $pages}{$current + 1}{else}{$current}{/if}" aria-label="次のページへ"><span
+										aria-hidden="true">»</span></a></li>
+					</ul>
+				</nav>
+					{/if}
+			</div>
+		{else}
+			{View_Smarty::forge('parts/no-login')}
+		{/if}
+	</main>
+</article>
+{View_Smarty::forge('parts/footer')}

@@ -1,6 +1,3 @@
-<!-- {Uri::string()}
-{if Uri::string()|regex_replace:"/[^(test)]/":"" ne ""} active{/if}
--->
 <ul class="nav nav-tabs" style="margin-bottom: 10px">
 	<li{if Uri::string()|regex_replace:"/.*index.*/":"on" eq "on"} class="active"{/if}><a href="/mypage/index">プロフィール </a>
 	</li>
